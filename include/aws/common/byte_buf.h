@@ -111,6 +111,9 @@ AWS_COMMON_API
 bool aws_array_eq_c_str_ignore_case(const void *const array, const size_t array_len, const char *const c_str);
 
 AWS_COMMON_API
+bool aws_array_starts_with_c_str_ignore_case(const void* const array, const size_t array_len, const char* const c_str);
+
+AWS_COMMON_API
 int aws_byte_buf_init(struct aws_byte_buf *buf, struct aws_allocator *allocator, size_t capacity);
 
 /**

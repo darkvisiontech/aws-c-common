@@ -461,6 +461,34 @@ bool aws_array_eq_c_str_ignore_case(const void *const array, const size_t array_
     return str_bytes[array_len] == '\0';
 }
 
+bool aws_array_starts_with_c_str_ignore_case(const void *const array, const size_t array_len, const char *const c_str) {
+    AWS_PRECONDITION(
+        array || (array_len == 0),
+        "Either input pointer [array_a] mustn't be NULL or input [array_len] mustn't be zero.");
+    AWS_PRECONDITION(c_str != NULL);
+
+    /* Simpler implementation could have been:
+     *   return aws_array_eq_ignore_case(array, array_len, c_str, strlen(c_str));
+     * but that would have traversed c_str twice.
+     * This implementation traverses c_str just once. */
+
+    const uint8_t *array_bytes = array;
+    const uint8_t *str_bytes = (const uint8_t *)c_str;
+
+    for (size_t i = 0; i < array_len; ++i) {
+        uint8_t s = str_bytes[i];
+        if (s == '\0') {
+            return true;
+        }
+
+        if (s_tolower_table[array_bytes[i]] != s_tolower_table[s]) {
+            return false;
+        }
+    }
+
+    return str_bytes[array_len] == '\0';
+}
+
 bool aws_array_eq_c_str(const void *const array, const size_t array_len, const char *const c_str) {
     AWS_PRECONDITION(
         array || (array_len == 0),
